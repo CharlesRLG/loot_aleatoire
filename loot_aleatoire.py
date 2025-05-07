@@ -27,6 +27,7 @@ def generer_loot():
 # Interface Tkinter
 fenetre = tk.Tk()
 fenetre.title("Générateur de Loot")
+fenetre.geometry("200x150")
 
 resultat_label = tk.Label(fenetre, text="Appuyez sur le bouton pour le loot")
 resultat_label.pack(pady=10)
