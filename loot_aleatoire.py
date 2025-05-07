@@ -6,12 +6,22 @@ armures = ["Casque", "Cape", "Gants", "Botte", "Cuirasse", "Bouclier"]
 armes = ["Épée", "Hache", "Masse", "Espadon", "Hache d'arme", "Marteau", "Arc", "Arbalète", "Baton"]
 objets_magiques = ["Anneau magique", "Amulette magique", "Parchemin", "Baton", "Baguette", "armes", "Objets merveilleux"]
 bijoux = ["Bague", "Collier"]
-qualite_item = ["En ruine","Cassé","Médiocre", "Correcte","Assez bonne", "Bonne", "magnifique", "Chef d'oeuvre"]
+
+# Liste de qualité avec probabilités
+qualite_item = ["En ruine", "Cassé", "Médiocre", "Correcte", "Assez bonne", "Bonne", "Magnifique", "Chef d'oeuvre"]
+proba_qualite = [0.2, 0.2, 0.15, 0.2, 0.1, 0.1, 0.04, 0.01]
+
+# Liste de matériaux avec probabilités
+materiaux = [
+    "Bronze ou chêne", "Fer ou Hêtre", "Acier ou Frêne", "Platine ou Erable argenté", 
+    "Argent ou Saule blanc", "Mithril ou Bois de Lune", "Verre ou Bois de vitréalis", 
+    "Obsidienne ou Ebène", "Ebonite ou Bois de Corbeau", "Infernal ou Bois du Styx", "Auréalis ou Bois Céleste"
+]
+proba_materiaux = [0.2, 0.2, 0.15, 0.1, 0.1, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01]
 
 # Fonction de génération de loot
 def generer_loot():
     categorie = random.choice(["Armure", "Arme", "Objet magique", "Bijou"])
-    
     if categorie == "Armure":
         loot = random.choice(armures)
     elif categorie == "Arme":
@@ -20,24 +30,18 @@ def generer_loot():
         loot = random.choice(objets_magiques)
     else:
         loot = random.choice(bijoux)
-
     return loot, categorie
 
-# Détermination du matériel
+# Détermination du matériau
 def materiel_deter():
-    materiel = random.choice(["Bronze ou chêne", "Fer ou Hêtre", "Acier ou Frêne", "Platine ou Erable argenté", "Argent ou Saule blanc", "Mithril ou Bois de Lune", "Verre ou Bois de vitréalis", "Obsidienne ou Ebène", "Ebonite ou Bois de Corbeau", "Infernal ou Bois du Styx", "Auréalis ou Bois Céleste"])
-    return materiel
+    return random.choices(materiaux, proba_materiaux)[0]
 
 # Fonction qualité du loot
-
 def generer_qualite():
-    qualite = random.choice(qualite_item)
-    return qualite
+    return random.choices(qualite_item, proba_qualite)[0]
 
 # Fonction estimation
-
-def generer_estimation(categorie, qualite, loot):
-    
+def generer_estimation(categorie, qualite):
     if categorie == "Armure":
         price_categorie = 1
     elif categorie == "Arme":
@@ -47,35 +51,21 @@ def generer_estimation(categorie, qualite, loot):
     elif categorie == "Bijou":
         price_categorie = 5
     else:
-        price_categorie = loot
+        price_categorie = 1
 
-    if qualite == "En ruine":
-        price_qualite = 0.001
-    elif qualite == "Cassé":
-        price_qualite = 0.1
-    elif qualite == "Médiocre":
-        price_qualite = 0.25
-    elif qualite == "Correcte":
-        price_qualite = 0.5
-    elif qualite == "Assez bonne":
-        price_qualite = 1
-    elif qualite == "Bonne":
-        price_qualite = 10
-    elif qualite == "Magnifique":
-        price_qualite = 25
-    else :
-        price_qualite = 100
-
-    price = price_categorie * price_qualite
-
+    qualite_prix = {
+        "En ruine": 0.001, "Cassé": 0.1, "Médiocre": 0.25, 
+        "Correcte": 0.5, "Assez bonne": 1, "Bonne": 10, 
+        "Magnifique": 25, "Chef d'oeuvre": 100
+    }
+    price = price_categorie * qualite_prix[qualite]
     return price
 
-# fonction combiné
-
+# Fonction combinée
 def fonction_combine():
     loot, categorie = generer_loot()
     qualite_result = generer_qualite()
-    estimation = generer_estimation(categorie, qualite_result, loot)
+    estimation = generer_estimation(categorie, qualite_result)
     matiere = materiel_deter()
     resultat_label.config(text=f"Vous avez trouvé : {loot} en {matiere}\nQualité : {qualite_result}\nEstimation : {float(estimation)} pièces d'or")
 
