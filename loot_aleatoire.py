@@ -2,10 +2,10 @@ import tkinter as tk
 import random
 
 # Listes de loot
-armures = ["Casque", "Cape", "Bracelet", "Botte", "Cuirasse", "Bouclier"]
-armes = ["Épée", "Hache", "Masse", "Espadon", "Hache d'arme", "Marteau", "Arc", "Arbalète"]
-objets_magiques = ["Anneau magique", "Amulette magique", "Potion de soin", "Parchemin mystique"]
-bijoux = ["Bague en or", "Collier en argent", "Bracelet en platine"]
+armures = ["Casque", "Cape", "Gants", "Botte", "Cuirasse", "Bouclier"]
+armes = ["Épée", "Hache", "Masse", "Espadon", "Hache d'arme", "Marteau", "Arc", "Arbalète", "Baton"]
+objets_magiques = ["Anneau magique", "Amulette magique", "Parchemin", "Baton", "Baguette", "armes", "Objets merveilleux"]
+bijoux = ["Bague", "Collier"]
 qualite_item = ["En ruine","Cassé","Médiocre", "Correcte","Assez bonne", "Bonne", "magnifique", "Chef d'oeuvre"]
 
 # Fonction de génération de loot
@@ -22,7 +22,11 @@ def generer_loot():
         loot = random.choice(bijoux)
 
     return loot, categorie
-  
+
+# Détermination du matériel
+def materiel_deter():
+    materiel = random.choice(["Bronze ou chêne", "Fer ou Hêtre", "Acier ou Frêne", "Platine ou Erable argenté", "Argent ou Saule blanc", "Mithril ou Bois de Lune", "Verre ou Bois de vitréalis", "Obsidienne ou Ebène", "Ebonite ou Bois de Corbeau", "Infernal ou Bois du Styx", "Auréalis ou Bois Céleste"])
+    return materiel
 
 # Fonction qualité du loot
 
@@ -35,9 +39,9 @@ def generer_qualite():
 def generer_estimation(categorie, qualite, loot):
     
     if categorie == "Armure":
-        price_categorie = 2
+        price_categorie = 1
     elif categorie == "Arme":
-        price_categorie = 2
+        price_categorie = 1
     elif categorie == "Objet magique":
         price_categorie = 50
     elif categorie == "Bijou":
@@ -72,7 +76,8 @@ def fonction_combine():
     loot, categorie = generer_loot()
     qualite_result = generer_qualite()
     estimation = generer_estimation(categorie, qualite_result, loot)
-    resultat_label.config(text=f"Vous avez trouvé : {loot}\nQualité : {qualite_result}\nEstimation : {float(estimation)} pièces d'or")
+    matiere = materiel_deter()
+    resultat_label.config(text=f"Vous avez trouvé : {loot} en {matiere}\nQualité : {qualite_result}\nEstimation : {float(estimation)} pièces d'or")
 
 # Interface Tkinter
 fenetre = tk.Tk()
