@@ -4,7 +4,7 @@ import random
 # === Données ===
 armures = ["Casque", "Cape", "Gants", "Botte", "Cuirasse", "Bouclier"]
 armes = ["Épée", "Hache", "Masse", "Espadon", "Hache d'arme", "Marteau", "Arc", "Arbalète", "Bâton"]
-objets_magiques = ["Anneau magique", "Amulette magique", "Bâton", "Baguette", "Armes", "Objets merveilleux"]
+objets_magiques = ["Anneau magique --- Voir site", "Amulette magique --- Voir site", "Bâton --- Voir site", "Baguette --- Voir site", "Armes --- Voir site", "Objets merveilleux --- Voir site"]
 bijoux = ["Bague", "Collier"]
 
 # Catégories et leur coefficient de prix de base
@@ -19,9 +19,9 @@ prix_categorie = {
 qualite_item = ["En ruine", "Cassé", "Médiocre", "Correcte", "Assez bonne", "Bonne", "Magnifique", "Chef d'oeuvre"]
 proba_qualite = [0.2, 0.2, 0.15, 0.2, 0.1, 0.1, 0.04, 0.01]
 prix_qualite = {
-    "En ruine": 0.001, "Cassé": 0.1, "Médiocre": 0.25,
+    "En ruine": 0, "Cassé": 0.1, "Médiocre": 0.25,
     "Correcte": 0.5, "Assez bonne": 1, "Bonne": 10,
-    "Magnifique": 25, "Chef d'oeuvre": 100
+    "Magnifique": 25, "Chef d'oeuvre": 1000
 }
 
 # Liste de matériaux avec probabilités et leurs prix
@@ -32,11 +32,11 @@ materiaux = [
 ]
 proba_materiaux = [0.2, 0.2, 0.15, 0.1, 0.1, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01]
 prix_materiaux = {
-    "Bronze ou chêne": 1, "Fer ou Hêtre": 2, "Acier ou Frêne": 5,
-    "Platine ou Érable argenté": 10, "Argent ou Saule blanc": 15,
-    "Mithril ou Bois de Lune": 30, "Verre ou Bois de vitréalis": 50,
-    "Obsidienne ou Ébène": 75, "Ebonite ou Bois de Corbeau": 100,
-    "Infernal ou Bois du Styx": 150, "Auréalis ou Bois Céleste": 300
+    "Bronze ou chêne": 2, "Fer ou Hêtre": 4, "Acier ou Frêne": 10,
+    "Platine ou Érable argenté": 20, "Argent ou Saule blanc": 30,
+    "Mithril ou Bois de Lune": 60, "Verre ou Bois de vitréalis": 100,
+    "Obsidienne ou Ébène": 150, "Ebonite ou Bois de Corbeau": 200,
+    "Infernal ou Bois du Styx": 500, "Auréalis ou Bois Céleste": 1000
 }
 
 # === Fonctions de génération ===
@@ -63,7 +63,7 @@ def calculer_bonus(categorie, qualite, materiel):
     bonus = ""
 
     if categorie == "Arme":
-        degats = index_materiau * 10
+        degats = (index_materiau + 1) * 10
         bonus = f"+{degats} dégâts"
         if qualite == "Chef d'oeuvre":
             if materiel in ["Arc", "Arbalète"]:
@@ -71,7 +71,7 @@ def calculer_bonus(categorie, qualite, materiel):
             else:
                 bonus += ", +5 en CC"
     elif categorie == "Armure":
-        armure = index_materiau * 10
+        armure = (index_materiau + 1) * 10
         bonus = f"+{armure} en protection"
         if qualite == "Chef d'oeuvre":
             bonus += ", +5 en Sociabilité"
@@ -110,7 +110,9 @@ def fonction_combine():
         text=(f"Vous avez trouvé : {loot} en {materiel}\n"
               f"Qualité : {qualite}\n"
               f"Bonus : {bonus}\n"
-              f"Valeur estimée : {pieces_or} PO, {pieces_argent} PA, {pieces_cuivre} PC")
+              f"Valeur estimée : {pieces_or} PO, {pieces_argent} PA, {pieces_cuivre} PC\n"
+              "Si votre loot est cassé, vous pouvez le faire réparer pour 1/5 du prix estimé\n"
+              f"soit : {pieces_or/5} PO, {pieces_argent/5} PA, {pieces_cuivre/5} PC")
     )
 
 bouton_loot = tk.Button(fenetre, text="Générer Loot", command=fonction_combine)
